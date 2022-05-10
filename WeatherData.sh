@@ -2,13 +2,14 @@
 
 `scp -i /home/pgaill/.ssh/id_rsa pgaill24@10.30.48.100:/tmp/weather.json /home/pgaill/projet_AdminLinux/weather.json`
 
-temp=`grep -o '"temp":.[^\\]' /home/pgaill/projet_AdminLinux/weather.json | sed 's/"temp"://g'`
+temp=`grep -Po '"temp":.*?[^*],' /home/pgaill/projet_AdminLinux/weather.json | sed 's/"temp"://g' | sed 's/,//g'`
+temp=$(awk '{print $1-$2}' <<<"${temp} 273.15}")
 humidite=`grep -o '"humidity":.[^\\]' /home/pgaill/projet_AdminLinux//weather.json | sed 's/"humidity"://g'`
 main=`grep -Po '"main":.*?[^*]"' /home/pgaill/projet_AdminLinux/weather.json | sed 's/"main":"//g' | sed 's/".*//g'`
 
 city=`grep -Po '"name":.*?[^*]"' /home/pgaill/projet_AdminLinux/weather.json | sed 's/"name":"//g' | sed 's/"//g'`
 
-hour=`date +"%H"`
+hour=$(date +"%k" | sed "s/ //g")
 
 touch "/home/pgaill/projet_AdminLinux/temp/temp_${hour}.txt"
 touch "/home/pgaill/projet_AdminLinux/humidite/humidite_${hour}.txt"
