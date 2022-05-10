@@ -6,7 +6,7 @@ temp=`grep -Po '"temp":.*?[^*],' /home/pgaill/projet_AdminLinux/weather.json | s
 temp=$(awk '{print $1-$2}' <<<"${temp} 273.15")
 humidite=`grep -o '"humidity":.[^\\]' /home/pgaill/projet_AdminLinux//weather.json | sed 's/"humidity"://g'`
 
-min=$(date +"%M" | sed "s/ //g")
+min=$(date +"%M" | sed "s/0//g")
 
 city=`grep -Po '"name":.*?[^*]"' /home/pgaill/projet_AdminLinux/weather.json | sed 's/"name":"//g' | sed 's/"//g'`
 
@@ -25,4 +25,100 @@ touch "/home/pgaill/projet_AdminLinux/humidite/humidite_${hour}.txt"
 
 echo $temp >> "/home/pgaill/projet_AdminLinux/temp/temp_${hour}.txt"
 echo $humidite >> "/home/pgaill/projet_AdminLinux/humidite/humidite_${hour}.txt"
+
+# Rapport Partiel 
+
+
+printf "# Rapport météorologique de Nantes \n\n" > "/home/pgaill/projet_AdminLinux/uncomplete_report.md"
+date=`date +"%d-%m-%Y"`
+printf "**Jour**: $date \n" >> "/home/pgaill/projet_AdminLinux/uncomplete_report.md"
+printf "**Emplacement**: Nantes (47.21°N,1.55°W)\n\n" >> "/home/pgaill/projet_AdminLinux/uncomplete_report.md"
+
+printf "##Temperature\n\n" >> "/home/pgaill/projet_AdminLinux/uncomplete_report.md"
+
+#! Ciel
+
+printf "| Heure | Température |\n" >> "/home/pgaill/projet_AdminLinux/uncomplete_report.md"
+printf "|----------|------------|\n" >> "/home/pgaill/projet_AdminLinux/uncomplete_report.md"
+
+for i in {1..23}
+do
+    if [ -f "/home/pgaill/projet_AdminLinux/temp/temp_${i}.txt" ]; 
+    then 
+        line=`wc -l /home/pgaill/projet_AdminLinux/temp/temp_${i}.txt | awk '{print $1  }'`
+        tot=0
+        tab=`cat "/home/pgaill/projet_AdminLinux/temp/temp_${i}.txt"`
+    
+        for j in ${tab[*]}
+        do
+            tot=$(awk '{print $1+$2}' <<<"${tot} $j}")
+        done
+      
+        if((line != 0)) 
+        then
+            value=$(awk '{print $1/$2}' <<<"${tot} $line}")
+        else 
+            value='0'
+        fi
+
+        printf '|%4s%6s|' "$i" >> "/home/pgaill/projet_AdminLinux/uncomplete_report.md"
+        printf '%6.1f%6s|\n' "$value" >> "/home/pgaill/projet_AdminLinux/uncomplete_report.md"
+    fi
+done
+
+
+printf "\n##Humidite\n\n" >> "/home/pgaill/projet_AdminLinux/uncomplete_report.md"
+
+#! Ciel
+
+printf "| Heure | Humidite |\n" >> "/home/pgaill/projet_AdminLinux/uncomplete_report.md"
+printf "|----------|------------|\n" >> "/home/pgaill/projet_AdminLinux/uncomplete_report.md"
+
+for i in {1..23}
+do
+    if [ -f "/home/pgaill/projet_AdminLinux/humidite/humidite_${i}.txt" ]; 
+    then
+        line=`wc -l /home/pgaill/projet_AdminLinux/humidite/humidite_${i}.txt | awk '{print $1  }'`
+        tot=0
+        tab=`cat "/home/pgaill/projet_AdminLinux/humidite/humidite_${i}.txt"`
+    
+        for j in ${tab[*]}
+        do
+                tot=$(($tot + $j))
+        done
+
+
+        if((line != 0)) 
+        then
+             value=$(awk '{print $1/$2}' <<<"${tot} $line}")
+        else 
+            value='0'
+        fi
+
+        printf '|%4s%6s|' "$i" >> "/home/pgaill/projet_AdminLinux/uncomplete_report.md"
+        printf '%6.1f%6s|\n' "$value" >> "/home/pgaill/projet_AdminLinux/uncomplete_report.md"
+    fi
+done
+
+
+printf "\n##Ciel\n\n" >> "/home/pgaill/projet_AdminLinux/uncomplete_report.md"
+
+#! Ciel
+
+printf "| Heure | Ciel |\n" >> "/home/pgaill/projet_AdminLinux/uncomplete_report.md"
+printf "|----------|------------|\n" >> "/home/pgaill/projet_AdminLinux/uncomplete_report.md"
+
+for i in {1..23}
+do
+    if [ -f "/home/pgaill/projet_AdminLinux/temp/temp_${i}.txt" ]; 
+    then 
+        value=`cat "/home/pgaill/projet_AdminLinux/main/main_${i}.txt"`
+        printf '|%4s%6s|' "$i" >> "/home/pgaill/projet_AdminLinux/uncomplete_report.md"
+        printf '%6s%6s|\n' "$value" >> "/home/pgaill/projet_AdminLinux/uncomplete_report.md"
+    fi
+done
+
+
+
+
 

@@ -1,7 +1,7 @@
 # Rapport météorologique de Nantes 
 
 **Jour**: 10-05-2022 
-**Emplacement**: Nantes (47.21'N,1.55'W)
+**Emplacement**: Nantes (47.21°N,1.55°W)
 
 ##Temperature
 
@@ -12,8 +12,6 @@
 |  10      |  19.5      |
 |  11      |  37.7      |
 |  16      |  29.0      |
-**Temperature min**: 16.3478
-**Temperature max**: 37.708
 
 ##Humidite
 
@@ -24,8 +22,6 @@
 |  10      |  67.2      |
 |  11      |  55.9      |
 |  16      |  52.0      |
-**Humidite min**: 52
-**Humidite max**: 93.1176
 
 ##Ciel
 
@@ -37,4 +33,3 @@
 |  11      |Clear
 Clear      |
 |  16      | Clear      |
-**Global**: Clear
