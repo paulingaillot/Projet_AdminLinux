@@ -14,6 +14,8 @@ printf "| Heure | Température |\n" >> "/home/pgaill/projet_AdminLinux/report.md
 printf "|-------|-------------|\n" >> "/home/pgaill/projet_AdminLinux/report.md"
 
 
+min=100
+max=-100
 for i in {1..23}
 do
     if [ -f "./temp/temp_${i}.txt" ]; 
@@ -24,7 +26,7 @@ do
     
         for j in ${tab[*]}
         do
-                tot=$(awk '{print $1+$2}' <<<"${tot} $j}")
+            tot=$(awk '{print $1+$2}' <<<"${tot} $j}")
         done
       
         if((line != 0)) 
@@ -33,10 +35,25 @@ do
         else 
             value='0'
         fi
+
+        test2=$(awk '{print $2 < $1}' <<< "$min $value" )
+        test3=$(awk '{print $2 < $1}' <<< "$value $max" )
+        if [ "$test2" -eq "1" ]
+        then
+                min=$value
+        fi
+        if [ "$test3" -eq "1" ]
+        then
+            max=$value
+        fi
+
         printf '|%8s%10s|' "$i" >> "/home/pgaill/projet_AdminLinux/report.md"
-        printf '|%8s%10s|\n' "$value" >> "/home/pgaill/projet_AdminLinux/report.md"
+        printf '%8s%10s|\n' "$value" >> "/home/pgaill/projet_AdminLinux/report.md"
+
     fi
 done
+printf "**Temperature min**: $min\n">> "/home/pgaill/projet_AdminLinux/report.md"
+printf "**Temperature max**: $max\n" >> "/home/pgaill/projet_AdminLinux/report.md"
 
 
 
@@ -47,6 +64,9 @@ printf "\n##Humidite\n\n" >> "/home/pgaill/projet_AdminLinux/report.md"
 printf "| Heure | Humidite |\n" >> "/home/pgaill/projet_AdminLinux/report.md"
 printf "|-------|-------------|\n" >> "/home/pgaill/projet_AdminLinux/report.md"
 
+
+min=100
+max=-100
 for i in {1..23}
 do
     if [ -f "./humidite/humidite_${i}.txt" ]; 
@@ -67,10 +87,24 @@ do
         else 
             value='0'
         fi
+
+        test2=$(awk '{print $2 < $1}' <<< "$min $value" )
+        test3=$(awk '{print $2 < $1}' <<< "$value $max" )
+        if [ "$test2" -eq "1" ]
+        then
+                min=$value
+        fi
+        if [ "$test3" -eq "1" ]
+        then
+            max=$value
+        fi
+
         printf '|%8s%10s|' "$i" >> "/home/pgaill/projet_AdminLinux/report.md"
-        printf '|%8s%10s|\n' "$value" >> "/home/pgaill/projet_AdminLinux/report.md"
+        printf '%8s%10s|\n' "$value" >> "/home/pgaill/projet_AdminLinux/report.md"
     fi
 done
+printf "**Humidite min**: $min\n">> "/home/pgaill/projet_AdminLinux/report.md"
+printf "**Humidite max**: $max\n" >> "/home/pgaill/projet_AdminLinux/report.md"
 
 printf "\n##Ciel\n\n" >> "/home/pgaill/projet_AdminLinux/report.md"
 
@@ -85,19 +119,16 @@ do
     then 
         value=`cat "./main/main_${i}.txt"`
         printf '|%8s%10s|' "$i" >> "/home/pgaill/projet_AdminLinux/report.md"
-        printf '|%8s%10s|\n' "$value" >> "/home/pgaill/projet_AdminLinux/report.md"
+        printf '%8s%10s|\n' "$value" >> "/home/pgaill/projet_AdminLinux/report.md"
     fi
 done
 
-#! Temperature
+`awk -F: '{print $1}' /home/pgaill/projet_AdminLinux/main/main_all.txt | sort | uniq -c | sort -rn | awk '{print $2}' >  /home/pgaill/projet_AdminLinux/main/main_all_sorted.txt`
+meteo=$(head -n 1  /home/pgaill/projet_AdminLinux/main/main_all_sorted.txt)
 
-echo "Temperature"
-
-
-#!humidite
+printf "**Global**: $meteo\n" >> "/home/pgaill/projet_AdminLinux/report.md"
 
 
-echo "Humidite"
 
 
 
