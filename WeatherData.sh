@@ -1,12 +1,13 @@
 #!/bin/bash
 
-`scp -i /home/pgaill/.ssh/id_rsa pgaill24@10.30.48.100:/tmp/weather.json /home/pgaill/projet_AdminLinux/weather.json`
+#`scp -i /home/pgaill/.ssh/id_rsa pgaill24@10.30.48.100:/tmp/weather.json /home/pgaill/projet_AdminLinux/weather.json`
+ wget "https://api.openweathermap.org/data/2.5/weather?lat=47.218371&lon=-1.553621&appid=ee4bbad0fcec46876c73fa6ad4faec06" --output-document=weather.json
 
 temp=`grep -Po '"temp":.*?[^*],' /home/pgaill/projet_AdminLinux/weather.json | sed 's/"temp"://g' | sed 's/,//g'`
 temp=$(awk '{print $1-$2}' <<<"${temp} 273.15")
 humidite=`grep -o '"humidity":.[^\\]' /home/pgaill/projet_AdminLinux//weather.json | sed 's/"humidity"://g'`
 
-min=$(date +"%M" | sed "s/0//g")
+min=$(date +"%M" | sed "s/ //g")
 
 city=`grep -Po '"name":.*?[^*]"' /home/pgaill/projet_AdminLinux/weather.json | sed 's/"name":"//g' | sed 's/"//g'`
 
@@ -24,7 +25,13 @@ touch "/home/pgaill/projet_AdminLinux/temp/temp_${hour}.txt"
 touch "/home/pgaill/projet_AdminLinux/humidite/humidite_${hour}.txt"
 
 echo $temp >> "/home/pgaill/projet_AdminLinux/temp/temp_${hour}.txt"
+
+moment=`date +"%H:%M"`
+echo "$moment;$temp" >> "/home/pgaill/projet_AdminLinux/temp/temp_all.txt"
+
+
 echo $humidite >> "/home/pgaill/projet_AdminLinux/humidite/humidite_${hour}.txt"
+echo "$moment;$humidite" >> "/home/pgaill/projet_AdminLinux/humidite/humidite_all.txt"
 
 # Rapport Partiel 
 
@@ -110,7 +117,7 @@ printf "|----------|------------|\n" >> "/home/pgaill/projet_AdminLinux/uncomple
 
 for i in {1..23}
 do
-    if [ -f "/home/pgaill/projet_AdminLinux/temp/temp_${i}.txt" ]; 
+    if [ -f "/home/pgaill/projet_AdminLinux/main/main_${i}.txt" ]; 
     then 
         value=`cat "/home/pgaill/projet_AdminLinux/main/main_${i}.txt"`
         printf '|%4s%6s|' "$i" >> "/home/pgaill/projet_AdminLinux/uncomplete_report.md"

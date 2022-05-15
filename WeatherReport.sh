@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 printf "# Rapport météorologique de Nantes \n\n" > "/home/pgaill/projet_AdminLinux/report.md"
 date=`date +"%d-%m-%Y"`
 printf "**Jour**: $date \n" >> "/home/pgaill/projet_AdminLinux/report.md" >> "/home/pgaill/projet_AdminLinux/report.md"
@@ -51,8 +50,11 @@ do
 
     fi
 done
-printf "**Temperature min**: $min\n">> "/home/pgaill/projet_AdminLinux/report.md"
-printf "**Temperature max**: $max\n" >> "/home/pgaill/projet_AdminLinux/report.md"
+printf "\- **Temperature min**: $min\n">> "/home/pgaill/projet_AdminLinux/report.md"
+printf "\- **Temperature max**: $max\n\n" >> "/home/pgaill/projet_AdminLinux/report.md"
+
+`gnuplot --persist script.txt` 
+printf "![](Temp_graph.png)\n" >> "/home/pgaill/projet_AdminLinux/report.md"
 
 
 
@@ -101,8 +103,11 @@ do
         printf '%6.1f%6s|\n' "$value" >> "/home/pgaill/projet_AdminLinux/report.md"
     fi
 done
-printf "**Humidite min**: $min\n">> "/home/pgaill/projet_AdminLinux/report.md"
-printf "**Humidite max**: $max\n" >> "/home/pgaill/projet_AdminLinux/report.md"
+printf "\- **Humidite min**: $min\n">> "/home/pgaill/projet_AdminLinux/report.md"
+printf "\- **Humidite max**: $max\n\n" >> "/home/pgaill/projet_AdminLinux/report.md"
+
+`gnuplot --persist script2.txt` 
+printf "![](Humidite_graph.png)\n" >> "/home/pgaill/projet_AdminLinux/report.md"
 
 printf "\n##Ciel\n\n" >> "/home/pgaill/projet_AdminLinux/report.md"
 
@@ -113,7 +118,7 @@ printf "|----------|------------|\n" >> "/home/pgaill/projet_AdminLinux/report.m
 
 for i in {1..23}
 do
-    if [ -f "/home/pgaill/projet_AdminLinux/temp/temp_${i}.txt" ]; 
+    if [ -f "/home/pgaill/projet_AdminLinux/main/main_${i}.txt" ]; 
     then 
         value=`cat "/home/pgaill/projet_AdminLinux/main/main_${i}.txt"`
         printf '|%4s%6s|' "$i" >> "/home/pgaill/projet_AdminLinux/report.md"
@@ -121,12 +126,12 @@ do
     fi
 done
 
-`awk -F: '{print $1}' /home/pgaill/projet_AdminLinux/main/main_all.txt | sort | uniq -c | sort -rn | awk '{print $2}' >  /home/pgaill/projet_AdminLinux/main/main_all_sorted.txt`
-meteo=$(head -n 1  /home/pgaill/projet_AdminLinux/main/main_all_sorted.txt)
+if [ -f "/home/pgaill/projet_AdminLinux/main/main_all.txt" ]; 
+then 
+    `awk -F: '{print $1}' /home/pgaill/projet_AdminLinux/main/main_all.txt | sort | uniq -c | sort -rn | awk '{print $2}' >  /home/pgaill/projet_AdminLinux/main/main_all_sorted.txt`
+    meteo=$(head -n 1  /home/pgaill/projet_AdminLinux/main/main_all_sorted.txt)
+    printf "\- **Global**: $meteo\n" >> "/home/pgaill/projet_AdminLinux/report.md"
+fi
 
-printf "**Global**: $meteo\n" >> "/home/pgaill/projet_AdminLinux/report.md"
 
-
-
-
-
+`pandoc report.md -o report.pdf`
