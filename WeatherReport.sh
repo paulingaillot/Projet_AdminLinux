@@ -130,8 +130,10 @@ if [ -f "/home/pgaill/projet_AdminLinux/main/main_all.txt" ];
 then 
     `awk -F: '{print $1}' /home/pgaill/projet_AdminLinux/main/main_all.txt | sort | uniq -c | sort -rn | awk '{print $2}' >  /home/pgaill/projet_AdminLinux/main/main_all_sorted.txt`
     meteo=$(head -n 1  /home/pgaill/projet_AdminLinux/main/main_all_sorted.txt)
-    printf "\- **Global**: $meteo\n" >> "/home/pgaill/projet_AdminLinux/report.md"
+    printf "\- **Global**: $meteo\n\n" >> "/home/pgaill/projet_AdminLinux/report.md"
 fi
 
+`gnuplot --persist script3.txt` 
+printf "![](Main_graph.png)\n" >> "/home/pgaill/projet_AdminLinux/report.md"
 
 `pandoc report.md -o report.pdf`

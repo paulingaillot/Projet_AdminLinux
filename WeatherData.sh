@@ -1,11 +1,12 @@
 #!/bin/bash
 
 #`scp -i /home/pgaill/.ssh/id_rsa pgaill24@10.30.48.100:/tmp/weather.json /home/pgaill/projet_AdminLinux/weather.json`
- wget "https://api.openweathermap.org/data/2.5/weather?lat=47.218371&lon=-1.553621&appid=ee4bbad0fcec46876c73fa6ad4faec06" --output-document=weather.json
+ wget "https://api.openweathermap.org/data/2.5/weather?lat=47.218371&lon=-1.553621&appid=ee4bbad0fcec46876c73fa6ad4faec06" --output-document="/home/pgaill/projet_AdminLinux/weather.json"
 
 temp=`grep -Po '"temp":.*?[^*],' /home/pgaill/projet_AdminLinux/weather.json | sed 's/"temp"://g' | sed 's/,//g'`
 temp=$(awk '{print $1-$2}' <<<"${temp} 273.15")
 humidite=`grep -o '"humidity":.[^\\]' /home/pgaill/projet_AdminLinux//weather.json | sed 's/"humidity"://g'`
+icon=` grep -Po '"icon":.*?[^*]"' /home/pgaill/projet_AdminLinux/weather.json | sed 's/"icon"://g' | sed 's/"//g'`
 
 min=$(date +"%M" | sed "s/ //g")
 
@@ -13,20 +14,39 @@ city=`grep -Po '"name":.*?[^*]"' /home/pgaill/projet_AdminLinux/weather.json | s
 
 hour=$(date +"%k" | sed "s/ //g")
 
+moment=`date +"%H:%M"`
+
+if [ ! -f "/home/pgaill/projet_AdminLinux/main/" ];
+then
+    `mkdir /home/pgaill/projet_AdminLinux/main/`
+fi
+
+if [ ! -f "/home/pgaill/projet_AdminLinux/temp/" ];
+then
+    `mkdir /home/pgaill/projet_AdminLinux/temp/`
+fi
+
+if [ ! -f "/home/pgaill/projet_AdminLinux/humidite/" ];
+then
+    `mkdir /home/pgaill/projet_AdminLinux/humidite/`
+fi
+
+
 if ((min < 5));
 then
     main=`grep -Po '"main":.*?[^*]"' /home/pgaill/projet_AdminLinux/weather.json | sed 's/"main":"//g' | sed 's/".*//g'`
     touch "/home/pgaill/projet_AdminLinux/main/main_${hour}.txt"
     echo $main >> "/home/pgaill/projet_AdminLinux/main/main_${hour}.txt"
     echo $main >> "/home/pgaill/projet_AdminLinux/main/main_all.txt"
+    echo "$moment;$icon" >> "/home/pgaill/projet_AdminLinux/main/main_icon.txt"
 fi 
+
 
 touch "/home/pgaill/projet_AdminLinux/temp/temp_${hour}.txt"
 touch "/home/pgaill/projet_AdminLinux/humidite/humidite_${hour}.txt"
 
 echo $temp >> "/home/pgaill/projet_AdminLinux/temp/temp_${hour}.txt"
 
-moment=`date +"%H:%M"`
 echo "$moment;$temp" >> "/home/pgaill/projet_AdminLinux/temp/temp_all.txt"
 
 
