@@ -14,6 +14,10 @@ city=`grep -Po '"name":.*?[^*]"' /home/pgaill/projet_AdminLinux/weather.json | s
 lat= `grep -Po '"lat":.*?[^*]}' /home/pgaill/projet_AdminLinux/weather.json | sed 's/"lat":"//g' | sed 's/}//g'`
 long= `grep -Po '"long":.*?[^*],' /home/pgaill/projet_AdminLinux/weather.json| sed 's/"lon":"//g' | sed 's/,//g'`
 
+`echo $name >> /home/pgaill/projet_AdminLinux/city.txt`
+`echo $lat >> /home/pgaill/projet_AdminLinux/lat.txt`
+`echo $lon >> /home/pgaill/projet_AdminLinux/lon.txt`
+
 hour=$(date +"%k" | sed "s/ //g")
 
 moment=`date +"%H:%M"`
