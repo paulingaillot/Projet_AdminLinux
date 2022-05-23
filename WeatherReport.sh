@@ -1,8 +1,20 @@
 #!/bin/bash
 
-printf "# Rapport météorologique de Nantes \n\n" > "/home/pgaill/projet_AdminLinux/report.md"
+echo "---"> "/home/pgaill/projet_AdminLinux/report.md"
+echo "header-includes:">> "/home/pgaill/projet_AdminLinux/report.md"
+echo "- \usepackage{fancyhdr}">> "/home/pgaill/projet_AdminLinux/report.md"
+echo "- \pagestyle{fancy}">> "/home/pgaill/projet_AdminLinux/report.md"
+echo "-  \fancyhead[L]{Rapport Météorologique de Nantes}">> "/home/pgaill/projet_AdminLinux/report.md"
 date=`date +"%d-%m-%Y"`
-printf "**Jour**: $date \n" >> "/home/pgaill/projet_AdminLinux/report.md" >> "/home/pgaill/projet_AdminLinux/report.md"
+echo "-  \fancyhead[R]{$date}">> "/home/pgaill/projet_AdminLinux/report.md"
+echo "-  \fancyfoot[R]{\thepage}">> "/home/pgaill/projet_AdminLinux/report.md"
+echo "-  \fancyfoot[CO, CE]{}">> "/home/pgaill/projet_AdminLinux/report.md"
+echo "-  \fancyfoot[L]{temperature}">> "/home/pgaill/projet_AdminLinux/report.md"
+echo "---">> "/home/pgaill/projet_AdminLinux/report.md"
+
+printf "# Rapport météorologique de Nantes \n\n" >> "/home/pgaill/projet_AdminLinux/report.md"
+date=`date +"%d-%m-%Y"`
+printf "**Jour**: $date \n\n" >> "/home/pgaill/projet_AdminLinux/report.md" >> "/home/pgaill/projet_AdminLinux/report.md"
 printf "**Emplacement**: Nantes (47.21'N,1.55'W)\n\n" >> "/home/pgaill/projet_AdminLinux/report.md"
 
 printf "##Temperature\n\n" >> "/home/pgaill/projet_AdminLinux/report.md"
@@ -57,6 +69,7 @@ printf "\- **Temperature max**: $max\n\n" >> "/home/pgaill/projet_AdminLinux/rep
 printf "![](Temp_graph.png)\n" >> "/home/pgaill/projet_AdminLinux/report.md"
 
 
+printf "\pagebreak  \n">> "/home/pgaill/projet_AdminLinux/report.md"
 
 printf "\n##Humidite\n\n" >> "/home/pgaill/projet_AdminLinux/report.md"
 

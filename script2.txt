@@ -6,7 +6,7 @@ set xdata time
 set timefmt '%H:%M'
 set format x '%H:%M'
 set grid
-set autoscale
-set terminal png size 720,650
+set autoscale xy
+set terminal png size 820,450
 set output 'Humidite_graph.png'
-plot '/home/pgaill/projet_AdminLinux/humidite/humidite_all.txt' using 1:2 lt rgb 'red' w l
+plot '/home/pgaill/projet_AdminLinux/humidite/humidite_all.txt' using 1:2 lt rgb 'red' w l notitle

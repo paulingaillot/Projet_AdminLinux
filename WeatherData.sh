@@ -11,22 +11,26 @@ icon=` grep -Po '"icon":.*?[^*]"' /home/pgaill/projet_AdminLinux/weather.json | 
 min=$(date +"%M" | sed "s/ //g")
 
 city=`grep -Po '"name":.*?[^*]"' /home/pgaill/projet_AdminLinux/weather.json | sed 's/"name":"//g' | sed 's/"//g'`
+lat= `grep -Po '"lat":.*?[^*]}' /home/pgaill/projet_AdminLinux/weather.json | sed 's/"lat":"//g' | sed 's/}//g'`
+long= `grep -Po '"long":.*?[^*],' /home/pgaill/projet_AdminLinux/weather.json| sed 's/"lon":"//g' | sed 's/,//g'`
 
 hour=$(date +"%k" | sed "s/ //g")
 
 moment=`date +"%H:%M"`
 
-if [ ! -f "/home/pgaill/projet_AdminLinux/main/" ];
+if [ ! -f "/home/pgaill/projet_AdminLinux/main/main_icon.txt" ];
 then
     `mkdir /home/pgaill/projet_AdminLinux/main/`
+    `touch "/home/pgaill/projet_AdminLinux/main/main_icon.txt"`
 fi
 
-if [ ! -f "/home/pgaill/projet_AdminLinux/temp/" ];
+if [ ! -f "/home/pgaill/projet_AdminLinux/temp/temp_all.txt" ];
 then
     `mkdir /home/pgaill/projet_AdminLinux/temp/`
+    
 fi
 
-if [ ! -f "/home/pgaill/projet_AdminLinux/humidite/" ];
+if [ ! -f "/home/pgaill/projet_AdminLinux/humidite/humidite_all.txt" ];
 then
     `mkdir /home/pgaill/projet_AdminLinux/humidite/`
 fi

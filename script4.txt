@@ -1,0 +1,13 @@
+set title 'Evolution de la temperature au cours de la journée'
+set datafile separator ';'
+set ylabel '°C'
+set xlabel 'Heure'
+set xdata time
+set timefmt "%d/%m-%H:%M"
+set format x "%d/%m-%H:%M"
+set grid
+set terminal png size 1200,450
+set output 'Except_graph.png'
+plot '/home/pgaill/projet_AdminLinux/except_all.txt' u 1:2 lt rgb 'red' w l notitle
+set output 'Except2_graph.png'
+plot '/home/pgaill/projet_AdminLinux/except_all.txt' u 1:3 lt rgb 'blue' w l notitle 
