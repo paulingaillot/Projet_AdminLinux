@@ -11,12 +11,12 @@ icon=` grep -Po '"icon":.*?[^*]"' /home/pgaill/projet_AdminLinux/weather.json | 
 min=$(date +"%M" | sed "s/ //g")
 
 city=`grep -Po '"name":.*?[^*]"' /home/pgaill/projet_AdminLinux/weather.json | sed 's/"name":"//g' | sed 's/"//g'`
-lat= `grep -Po '"lat":.*?[^*]}' /home/pgaill/projet_AdminLinux/weather.json | sed 's/"lat":"//g' | sed 's/}//g'`
-long= `grep -Po '"long":.*?[^*],' /home/pgaill/projet_AdminLinux/weather.json| sed 's/"lon":"//g' | sed 's/,//g'`
+lat=`grep -Po '"lat":.*?[^*]}' /home/pgaill/projet_AdminLinux/weather.json | sed 's/"lat"://g' | sed 's/}//g'`
+lon=`grep -Po '"lon":.*?[^*],' /home/pgaill/projet_AdminLinux/weather.json| sed 's/"lon"://g' | sed 's/,//g'`
 
-`echo $name >> /home/pgaill/projet_AdminLinux/city.txt`
-`echo $lat >> /home/pgaill/projet_AdminLinux/lat.txt`
-`echo $lon >> /home/pgaill/projet_AdminLinux/lon.txt`
+`echo $city > /home/pgaill/projet_AdminLinux/city.txt`
+`echo $lat > /home/pgaill/projet_AdminLinux/lat.txt`
+`echo $lon > /home/pgaill/projet_AdminLinux/lon.txt`
 
 hour=$(date +"%k" | sed "s/ //g")
 
